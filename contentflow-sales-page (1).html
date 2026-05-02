@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContentFlow — The Content Studio That Sells For You</title>
+<meta name="description" content="Stop creating content that gets likes but makes no sales. ContentFlow is the AI content studio built around what you sell — not just what's trending.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  /* Primary — deep editorial teal */
+  --forest:      #1a3a3a;
+  --forest-mid:  #254f4f;
+  --forest-mute: #326666;
+  --forest-pale: #e4f0f0;
+
+  /* Accent — polished brass (unchanged) */
+  --brass:       #8c6d3f;
+  --brass-light: #b08d5b;
+  --brass-pale:  #f0e6d3;
+  --brass-xpale: #faf5ec;
+
+  /* Surfaces */
+  --cream:       #f8faf9;
+  --warm-white:  #fcfefd;
+  --bg2:         #edf3f2;
+
+  /* Signal */
+  --clay:        #9e4f35;
+
+  /* Text */
+  --ink:         #111e1e;
+  --ink-mid:     #354545;
+  --ink-light:   #617070;
+  --ink-faint:   #a0b0b0;
+
+  /* Borders */
+  --border:      #d4e2e2;
+
+  --r: 12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'Outfit', sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+/* ─── TYPOGRAPHY ─────────────────────────────────────── */
+.serif { font-family:'Cormorant Garamond', serif; }
+.lora  { font-family:'Lora', serif; }
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(32px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+
+@keyframes float {
+  0%,100% { transform:translateY(0px); }
+  50%     { transform:translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position:200% center; }
+  100% { background-position:-200% center; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform:scale(1); opacity:0.4; }
+  100% { transform:scale(1.6); opacity:0; }
+}
+
+.anim-up  { animation:fadeUp 0.7s ease both; }
+.delay-1  { animation-delay:0.1s; }
+.delay-2  { animation-delay:0.22s; }
+.delay-3  { animation-delay:0.34s; }
+.delay-4  { animation-delay:0.46s; }
+.delay-5  { animation-delay:0.58s; }
+
+/* ─── NAV ────────────────────────────────────────────── */
+nav {
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  padding:1rem 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(250,248,243,0.88);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(221,219,213,0.6);
+  transition:all 0.3s;
+}
+
+.nav-logo {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.35rem;
+  font-weight:600;
+  color:var(--forest);
+  letter-spacing:0.02em;
+}
+
+.nav-logo span {
+  color:var(--brass);
+  font-weight:400;
+  font-style:italic;
+}
+
+.nav-links {
+  display:flex;
+  align-items:center;
+  gap:2rem;
+  list-style:none;
+}
+
+.nav-links a {
+  font-size:0.82rem;
+  font-weight:500;
+  color:var(--ink-mid);
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:color 0.2s;
+}
+
+.nav-links a:hover { color:var(--forest); }
+
+.nav-cta {
+  background:var(--forest);
+  color:white !important;
+  padding:0.5rem 1.25rem;
+  border-radius:6px;
+  font-weight:600 !important;
+  transition:all 0.2s !important;
+  box-shadow:0 2px 10px rgba(26,58,58,0.2);
+}
+
+.nav-cta:hover {
+  background:var(--forest-mid) !important;
+  transform:translateY(-1px);
+  box-shadow:0 4px 18px rgba(26,58,58,0.3) !important;
+}
+
+/* ─── HERO ───────────────────────────────────────────── */
+.hero {
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:7rem 1.5rem 5rem;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Atmospheric background */
+.hero::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 30%, rgba(26,58,58,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 70%, rgba(140,109,63,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(26,58,58,0.04) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.hero-eyebrow {
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:var(--forest-pale);
+  border:1px solid rgba(26,58,58,0.15);
+  color:var(--forest-mid);
+  font-size:0.72rem;
+  font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:0.4rem 1rem;
+  border-radius:20px;
+  margin-bottom:1.75rem;
+}
+
+.hero-eyebrow-dot {
+  width:6px; height:6px;
+  background:var(--brass);
+  border-radius:50%;
+  position:relative;
+}
+
+.hero-eyebrow-dot::after {
+  content:'';
+  position:absolute;
+  inset:-3px;
+  border-radius:50%;
+  background:var(--brass);
+  opacity:0.3;
+  animation:pulse-ring 1.5s ease-out infinite;
+}
+
+.hero h1 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2.8rem, 7vw, 5.5rem);
+  font-weight:600;
+  color:var(--ink);
+  line-height:1.08;
+  letter-spacing:-0.02em;
+  margin-bottom:1.5rem;
+  max-width:820px;
+}
+
+.hero h1 em {
+  font-style:italic;
+  color:var(--forest);
+}
+
+.hero h1 .brass-line {
+  display:block;
+  background:linear-gradient(135deg, var(--brass), var(--brass-light), var(--brass));
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 4s linear infinite;
+}
+
+.hero-sub {
+  font-size:clamp(1rem, 2vw, 1.18rem);
+  color:var(--ink-mid);
+  line-height:1.7;
+  max-width:560px;
+  margin:0 auto 2.5rem;
+  font-weight:400;
+}
+
+.hero-ctas {
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:1.25rem;
+}
+
+.btn-primary-hero {
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:var(--forest);
+  color:white;
+  padding:0.9rem 2rem;
+  border-radius:8px;
+  font-size:0.9rem;
+  font-weight:600;
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:all 0.22s;
+  box-shadow:0 4px 20px rgba(26,58,58,0.25);
+}
+
+.btn-primary-hero:hover {
+  background:var(--forest-mid);
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(26,58,58,0.32);
+}
+
+.btn-secondary-hero {
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:white;
+  color:var(--ink);
+  padding:0.9rem 2rem;
+  border-radius:8px;
+  font-size:0.9rem;
+  font-weight:600;
+  text-decoration:none;
+  letter-spacing:0.02em;
+  border:1.5px solid var(--border);
+  transition:all 0.22s;
+  box-shadow:0 2px 8px rgba(26,58,58,0.06);
+}
+
+.btn-secondary-hero:hover {
+  border-color:var(--brass);
+  color:var(--brass);
+  transform:translateY(-2px);
+}
+
+.hero-note {
+  font-size:0.72rem;
+  color:var(--ink-faint);
+  letter-spacing:0.04em;
+}
+
+/* ─── APP PREVIEW MOCKUP ─────────────────────────────── */
+.hero-mockup {
+  width:100%;
+  max-width:900px;
+  margin:3.5rem auto 0;
+  position:relative;
+}
+
+.mockup-window {
+  background:var(--forest);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.06) inset,
+    0 40px 80px rgba(26,58,58,0.3),
+    0 10px 30px rgba(26,58,58,0.15);
+  animation:float 6s ease-in-out infinite;
+}
+
+.mockup-titlebar {
+  background:rgba(0,0,0,0.25);
+  padding:0.65rem 1rem;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+
+.mockup-dot {
+  width:10px; height:10px;
+  border-radius:50%;
+}
+
+.mockup-dot-r { background:#ff5f57; }
+.mockup-dot-y { background:#febc2e; }
+.mockup-dot-g { background:#28c840; }
+
+.mockup-url {
+  flex:1;
+  background:rgba(255,255,255,0.08);
+  border-radius:4px;
+  padding:0.25rem 0.75rem;
+  font-size:0.65rem;
+  color:rgba(255,255,255,0.45);
+  font-family:monospace;
+  margin:0 0.5rem;
+  text-align:center;
+}
+
+.mockup-body {
+  display:grid;
+  grid-template-columns:200px 1fr;
+  min-height:420px;
+}
+
+.mockup-sidebar {
+  background:rgba(0,0,0,0.2);
+  padding:1.25rem 0.85rem;
+  border-right:1px solid rgba(255,255,255,0.06);
+}
+
+.mockup-logo-text {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1rem;
+  font-weight:600;
+  color:white;
+  margin-bottom:0.2rem;
+}
+
+.mockup-logo-sub {
+  font-size:0.5rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+  margin-bottom:1.25rem;
+}
+
+.mockup-nav-label {
+  font-size:0.48rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.25);
+  margin-bottom:0.4rem;
+  padding:0.5rem 0.5rem 0;
+}
+
+.mockup-nav-item {
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.45rem 0.6rem;
+  border-radius:5px;
+  font-size:0.62rem;
+  font-weight:600;
+  color:rgba(255,255,255,0.55);
+  margin-bottom:2px;
+}
+
+.mockup-nav-item.active {
+  background:rgba(140,109,63,0.2);
+  color:#d4a55e;
+  border-left:2px solid #b08d5b;
+  padding-left:calc(0.6rem - 2px);
+}
+
+.mockup-content {
+  padding:1.5rem;
+}
+
+.mockup-content-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.1rem;
+  font-weight:500;
+  color:rgba(255,255,255,0.9);
+  margin-bottom:1rem;
+}
+
+.mockup-cards {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.65rem;
+  margin-bottom:0.75rem;
+}
+
+.mockup-card {
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px;
+  padding:0.75rem;
+}
+
+.mockup-card-label {
+  font-size:0.5rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+  margin-bottom:0.35rem;
+}
+
+.mockup-card-val {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.5rem;
+  font-weight:600;
+  color:white;
+}
+
+.mockup-card-sub {
+  font-size:0.5rem;
+  color:rgba(255,255,255,0.3);
+  margin-top:2px;
+}
+
+.mockup-content-block {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:8px;
+  padding:0.85rem;
+}
+
+.mockup-content-block-label {
+  font-size:0.5rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:rgba(140,109,63,0.8);
+  margin-bottom:0.5rem;
+}
+
+.mockup-line {
+  height:5px;
+  border-radius:3px;
+  background:rgba(255,255,255,0.08);
+  margin-bottom:0.35rem;
+}
+
+.mockup-line.w-full  { width:100%; }
+.mockup-line.w-80    { width:80%; }
+.mockup-line.w-60    { width:60%; }
+.mockup-line.w-40    { width:40%; }
+.mockup-line.brass   { background:rgba(140,109,63,0.4); width:50%; }
+.mockup-line.green   { background:rgba(26,58,58,0.5); width:65%; }
+
+/* ─── SECTION BASE ───────────────────────────────────── */
+section { padding:5rem 1.5rem; }
+
+.container {
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.section-eyebrow {
+  font-size:0.68rem;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin-bottom:0.75rem;
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+}
+
+.section-eyebrow::before {
+  content:'';
+  width:24px;
+  height:1.5px;
+  background:var(--brass);
+  flex-shrink:0;
+}
+
+.section-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2rem, 4.5vw, 3.2rem);
+  font-weight:600;
+  color:var(--ink);
+  line-height:1.12;
+  letter-spacing:-0.01em;
+  margin-bottom:1rem;
+}
+
+.section-sub {
+  font-size:1rem;
+  color:var(--ink-mid);
+  line-height:1.7;
+  max-width:560px;
+}
+
+/* ─── PROBLEM SECTION ───────────────────────────────── */
+.problem {
+  background:var(--forest);
+  color:white;
+}
+
+.problem .section-title { color:white; }
+.problem .section-sub   { color:rgba(255,255,255,0.65); }
+.problem .section-eyebrow { color:var(--brass-light); }
+.problem .section-eyebrow::before { background:var(--brass-light); }
+
+.problem-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  gap:1px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-top:3rem;
+}
+
+.problem-item {
+  background:var(--forest);
+  padding:1.75rem;
+  transition:background 0.2s;
+}
+
+.problem-item:hover { background:var(--forest-mid); }
+
+.problem-item-icon {
+  font-size:1.5rem;
+  margin-bottom:0.85rem;
+  display:block;
+}
+
+.problem-item-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.1rem;
+  font-weight:500;
+  color:white;
+  margin-bottom:0.4rem;
+  font-style:italic;
+}
+
+.problem-item-body {
+  font-size:0.78rem;
+  color:rgba(255,255,255,0.55);
+  line-height:1.65;
+}
+
+/* ─── FEATURES ───────────────────────────────────────── */
+.features-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:1.25rem;
+  margin-top:3rem;
+}
+
+.feature-card {
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  padding:1.75rem;
+  transition:all 0.22s;
+  box-shadow:0 2px 10px rgba(26,31,28,0.05);
+  position:relative;
+  overflow:hidden;
+}
+
+.feature-card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:3px;
+  background:linear-gradient(90deg, var(--forest), var(--brass));
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 12px 36px rgba(26,31,28,0.1);
+  border-color:var(--forest-mute);
+}
+
+.feature-card:hover::before { transform:scaleX(1); }
+
+.feature-icon {
+  font-size:1.75rem;
+  margin-bottom:0.85rem;
+  display:block;
+}
+
+.feature-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.15rem;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:0.4rem;
+}
+
+.feature-body {
+  font-size:0.78rem;
+  color:var(--ink-light);
+  line-height:1.65;
+}
+
+.feature-tag {
+  display:inline-block;
+  margin-top:0.75rem;
+  font-size:0.58rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--brass);
+  background:var(--brass-pale);
+  padding:0.18rem 0.55rem;
+  border-radius:20px;
+  border:1px solid rgba(140,109,63,0.2);
+}
+
+/* ─── SOCIAL PROOF / QUOTE ───────────────────────────── */
+.proof {
+  background:var(--brass-xpale);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+
+.proof-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:1.25rem;
+  margin-top:2.5rem;
+}
+
+.proof-card {
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  padding:1.5rem;
+  position:relative;
+}
+
+.proof-quote {
+  font-family:'Lora', serif;
+  font-size:0.95rem;
+  font-style:italic;
+  color:var(--ink);
+  line-height:1.75;
+  margin-bottom:1.1rem;
+}
+
+.proof-quote::before {
+  content:'"';
+  font-family:'Cormorant Garamond', serif;
+  font-size:3rem;
+  line-height:0;
+  color:var(--brass-light);
+  opacity:0.5;
+  vertical-align:-0.75rem;
+  margin-right:0.1rem;
+}
+
+.proof-author {
+  display:flex;
+  align-items:center;
+  gap:0.65rem;
+}
+
+.proof-avatar {
+  width:36px; height:36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.78rem;
+  font-weight:700;
+  color:white;
+  flex-shrink:0;
+}
+
+.proof-name {
+  font-size:0.78rem;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.proof-handle {
+  font-size:0.68rem;
+  color:var(--ink-faint);
+}
+
+/* ─── HOW IT WORKS ───────────────────────────────────── */
+.steps {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:0;
+  margin-top:3rem;
+  position:relative;
+}
+
+.steps::before {
+  content:'';
+  position:absolute;
+  top:28px;
+  left:calc(12.5% + 28px);
+  right:calc(12.5% + 28px);
+  height:1.5px;
+  background:linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+  z-index:0;
+}
+
+.step {
+  text-align:center;
+  padding:0 1.5rem;
+  position:relative;
+  z-index:1;
+}
+
+.step-num {
+  width:56px; height:56px;
+  border-radius:50%;
+  background:var(--forest);
+  color:white;
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.3rem;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 1.1rem;
+  box-shadow:0 4px 20px rgba(26,58,58,0.2);
+  position:relative;
+}
+
+.step-num::after {
+  content:'';
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  border:1.5px solid rgba(26,58,58,0.15);
+}
+
+.step-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.05rem;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:0.4rem;
+}
+
+.step-body {
+  font-size:0.75rem;
+  color:var(--ink-light);
+  line-height:1.6;
+}
+
+/* ─── HOOK MACHINE CALLOUT ───────────────────────────── */
+.hook-callout {
+  background:var(--forest);
+  border-radius:20px;
+  padding:3rem 3.5rem;
+  margin:5rem auto;
+  max-width:900px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:2rem;
+  align-items:center;
+  box-shadow:0 20px 60px rgba(26,58,58,0.2);
+  position:relative;
+  overflow:hidden;
+}
+
+.hook-callout::before {
+  content:'🎣';
+  position:absolute;
+  right:-1rem;
+  top:-1rem;
+  font-size:8rem;
+  opacity:0.06;
+  transform:rotate(20deg);
+}
+
+.hook-callout-eyebrow {
+  font-size:0.65rem;
+  font-weight:600;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--brass-light);
+  margin-bottom:0.5rem;
+}
+
+.hook-callout-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(1.5rem, 3vw, 2.2rem);
+  font-weight:600;
+  color:white;
+  line-height:1.15;
+  margin-bottom:0.75rem;
+}
+
+.hook-callout-body {
+  font-size:0.82rem;
+  color:rgba(255,255,255,0.6);
+  line-height:1.65;
+}
+
+.hook-engines-mini {
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-top:1rem;
+}
+
+.hook-engine-mini-tag {
+  font-size:0.62rem;
+  font-weight:600;
+  padding:0.22rem 0.6rem;
+  border-radius:20px;
+  background:rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.7);
+  border:1px solid rgba(255,255,255,0.12);
+}
+
+/* ─── PRICING ─────────────────────────────────────────── */
+.pricing-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  gap:1.25rem;
+  margin-top:3rem;
+  align-items:start;
+}
+
+.pricing-card {
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(26,31,28,0.06);
+  transition:all 0.22s;
+  position:relative;
+}
+
+.pricing-card:hover { transform:translateY(-4px); box-shadow:0 12px 36px rgba(26,31,28,0.1); }
+
+.pricing-card.featured {
+  border-color:var(--forest);
+  box-shadow:0 4px 24px rgba(26,58,58,0.14);
+}
+
+.pricing-badge {
+  position:absolute;
+  top:-1px; right:20px;
+  background:var(--brass);
+  color:white;
+  font-size:0.58rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:0.22rem 0.7rem;
+  border-radius:0 0 8px 8px;
+}
+
+.pricing-top {
+  padding:1.75rem 1.5rem 1.25rem;
+  border-bottom:1px solid var(--border);
+}
+
+.pricing-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.25rem;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:0.25rem;
+}
+
+.pricing-tagline {
+  font-size:0.72rem;
+  color:var(--ink-light);
+  line-height:1.5;
+  margin-bottom:1rem;
+}
+
+.pricing-price {
+  font-family:'Cormorant Garamond', serif;
+  font-size:2.5rem;
+  font-weight:600;
+  color:var(--forest);
+  line-height:1;
+}
+
+.pricing-price sup {
+  font-size:1.1rem;
+  font-weight:400;
+  vertical-align:top;
+  margin-top:0.5rem;
+  display:inline-block;
+}
+
+.pricing-period {
+  font-size:0.72rem;
+  color:var(--ink-light);
+  font-family:'Outfit', sans-serif;
+  font-weight:400;
+  margin-top:0.2rem;
+}
+
+.pricing-annual {
+  font-size:0.68rem;
+  color:var(--forest-mute);
+  font-weight:600;
+  margin-top:0.25rem;
+}
+
+.pricing-body {
+  padding:1.25rem 1.5rem;
+}
+
+.pricing-feature {
+  display:flex;
+  align-items:flex-start;
+  gap:0.6rem;
+  font-size:0.78rem;
+  color:var(--ink-mid);
+  line-height:1.5;
+  margin-bottom:0.65rem;
+}
+
+.pricing-feature::before {
+  content:'✓';
+  color:var(--forest-mute);
+  font-weight:700;
+  flex-shrink:0;
+  font-size:0.7rem;
+  margin-top:2px;
+}
+
+.pricing-foot {
+  padding:1rem 1.5rem 1.5rem;
+}
+
+.btn-pricing-primary {
+  display:block;
+  width:100%;
+  text-align:center;
+  background:var(--forest);
+  color:white;
+  padding:0.8rem;
+  border-radius:7px;
+  font-size:0.82rem;
+  font-weight:600;
+  text-decoration:none;
+  letter-spacing:0.03em;
+  transition:all 0.2s;
+  box-shadow:0 3px 14px rgba(26,58,58,0.22);
+  margin-bottom:0.5rem;
+}
+
+.btn-pricing-primary:hover {
+  background:var(--forest-mid);
+  transform:translateY(-1px);
+  box-shadow:0 6px 22px rgba(26,58,58,0.3);
+}
+
+.btn-pricing-secondary {
+  display:block;
+  width:100%;
+  text-align:center;
+  background:white;
+  color:var(--forest);
+  padding:0.8rem;
+  border-radius:7px;
+  font-size:0.82rem;
+  font-weight:600;
+  text-decoration:none;
+  letter-spacing:0.03em;
+  transition:all 0.2s;
+  border:1.5px solid var(--forest);
+  margin-bottom:0.5rem;
+}
+
+.btn-pricing-secondary:hover {
+  background:var(--forest-pale);
+}
+
+.btn-pricing-ghost {
+  display:block;
+  width:100%;
+  text-align:center;
+  background:var(--bg2);
+  color:var(--ink-mid);
+  padding:0.8rem;
+  border-radius:7px;
+  font-size:0.82rem;
+  font-weight:600;
+  text-decoration:none;
+  letter-spacing:0.03em;
+  transition:all 0.2s;
+  border:1.5px solid var(--border);
+  margin-bottom:0.5rem;
+}
+
+.btn-pricing-ghost:hover { background:var(--border); }
+
+.pricing-note {
+  font-size:0.62rem;
+  color:var(--ink-faint);
+  text-align:center;
+  line-height:1.5;
+}
+
+/* Payment icons */
+.payment-icons {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.6rem;
+  margin-top:2.5rem;
+  flex-wrap:wrap;
+}
+
+.payment-icon {
+  font-size:0.68rem;
+  font-weight:600;
+  color:var(--ink-light);
+  padding:0.3rem 0.85rem;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:white;
+}
+
+/* ─── FINAL CTA ───────────────────────────────────────── */
+.final-cta {
+  background:var(--forest);
+  text-align:center;
+  padding:6rem 1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.final-cta::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(140,109,63,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 50%, rgba(26,58,58,0.25) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.final-cta h2 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2.2rem, 5vw, 3.8rem);
+  font-weight:600;
+  color:white;
+  line-height:1.1;
+  letter-spacing:-0.01em;
+  margin-bottom:1rem;
+  position:relative;
+}
+
+.final-cta h2 em { color:var(--brass-light); font-style:italic; }
+
+.final-cta p {
+  font-size:1rem;
+  color:rgba(255,255,255,0.6);
+  margin-bottom:2.5rem;
+  max-width:480px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.7;
+  position:relative;
+}
+
+.final-cta-btns {
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  flex-wrap:wrap;
+  position:relative;
+}
+
+.btn-final-primary {
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:white;
+  color:var(--forest);
+  padding:1rem 2.25rem;
+  border-radius:8px;
+  font-size:0.92rem;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:all 0.22s;
+  box-shadow:0 4px 20px rgba(0,0,0,0.2);
+}
+
+.btn-final-primary:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.28);
+}
+
+.btn-final-brass {
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:var(--brass);
+  color:white;
+  padding:1rem 2.25rem;
+  border-radius:8px;
+  font-size:0.92rem;
+  font-weight:700;
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:all 0.22s;
+  box-shadow:0 4px 20px rgba(140,109,63,0.35);
+}
+
+.btn-final-brass:hover {
+  background:var(--brass-light);
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(140,109,63,0.45);
+}
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer {
+  background:var(--ink);
+  color:rgba(255,255,255,0.45);
+  text-align:center;
+  padding:2rem 1.5rem;
+  font-size:0.72rem;
+  line-height:1.8;
+}
+
+footer a { color:rgba(255,255,255,0.55); text-decoration:none; }
+footer a:hover { color:var(--brass-light); }
+
+/* ─── SCROLL REVEAL ──────────────────────────────────── */
+.reveal {
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding:0.85rem 1.25rem; }
+  .nav-links { display:none; }
+  .mockup-body { grid-template-columns:1fr; }
+  .mockup-sidebar { display:none; }
+  .hook-callout { grid-template-columns:1fr; padding:2rem; }
+  .steps::before { display:none; }
+  .step { padding:0 0.5rem; margin-bottom:2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Content<span>Flow</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="https://contentflowapp-home.netlify.app" class="nav-cta">Try Free →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow anim-up">
+    <div class="hero-eyebrow-dot"></div>
+    The Offer-First AI Content Studio
+  </div>
+
+  <h1 class="anim-up delay-1">
+    Your content should be<br>
+    <em>making you money.</em><br>
+    <span class="brass-line">Not just making you tired.</span>
+  </h1>
+
+  <p class="hero-sub anim-up delay-2">
+    ContentFlow is the only AI content studio built around <strong>what you sell</strong> — not just what's trending. Every post, reel, carousel, and hook is written to attract leads, handle objections, and convert browsers into buyers.
+  </p>
+
+  <div class="hero-ctas anim-up delay-3">
+    <a href="https://contentflowapp-home.netlify.app" class="btn-primary-hero">
+      ✦ Start Free — No Card Needed
+    </a>
+    <a href="#pricing" class="btn-secondary-hero">
+      See Pricing →
+    </a>
+  </div>
+
+  <p class="hero-note anim-up delay-4">Free plan available · No credit card · Works in minutes</p>
+
+  <!-- APP MOCKUP -->
+  <div class="hero-mockup anim-up delay-5">
+    <div class="mockup-window">
+      <div class="mockup-titlebar">
+        <div class="mockup-dot mockup-dot-r"></div>
+        <div class="mockup-dot mockup-dot-y"></div>
+        <div class="mockup-dot mockup-dot-g"></div>
+        <div class="mockup-url">contentflow.netlify.app</div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-sidebar">
+          <div class="mockup-logo-text">ContentFlow</div>
+          <div class="mockup-logo-sub">Content Studio</div>
+          <div class="mockup-nav-label">Main</div>
+          <div class="mockup-nav-item active">⬡ &nbsp;Dashboard</div>
+          <div class="mockup-nav-item">✦ &nbsp;Create Content</div>
+          <div class="mockup-nav-item">🎣 &nbsp;Hook Machine</div>
+          <div class="mockup-nav-label">Library</div>
+          <div class="mockup-nav-item">🏷 &nbsp;My Offers</div>
+          <div class="mockup-nav-item">📄 &nbsp;Saved Content</div>
+          <div class="mockup-nav-label">Planning</div>
+          <div class="mockup-nav-item">📅 &nbsp;Calendar</div>
+          <div class="mockup-nav-item">⏰ &nbsp;Scheduler</div>
+        </div>
+        <div class="mockup-content">
+          <div class="mockup-content-title">Good morning ✦</div>
+          <div class="mockup-cards">
+            <div class="mockup-card">
+              <div class="mockup-card-label">Active Offers</div>
+              <div class="mockup-card-val">4</div>
+              <div class="mockup-card-sub">products in library</div>
+            </div>
+            <div class="mockup-card">
+              <div class="mockup-card-label">Saved Content</div>
+              <div class="mockup-card-val">27</div>
+              <div class="mockup-card-sub">pieces generated</div>
+            </div>
+            <div class="mockup-card">
+              <div class="mockup-card-label">Scheduled</div>
+              <div class="mockup-card-val">8</div>
+              <div class="mockup-card-sub">posts this week</div>
+            </div>
+            <div class="mockup-card">
+              <div class="mockup-card-label">Published</div>
+              <div class="mockup-card-val">19</div>
+              <div class="mockup-card-sub">posts this month</div>
+            </div>
+          </div>
+          <div class="mockup-content-block">
+            <div class="mockup-content-block-label">Latest Generated — Instagram Caption · Sales Goal</div>
+            <div class="mockup-line w-full"></div>
+            <div class="mockup-line w-80"></div>
+            <div class="mockup-line w-full"></div>
+            <div class="mockup-line w-60"></div>
+            <div class="mockup-line brass"></div>
+            <div class="mockup-line green"></div>
+            <div class="mockup-line w-40"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="section-eyebrow reveal">Sound familiar?</div>
+    <h2 class="section-title reveal" style="color:white">You're posting.<br><em style="font-family:'Cormorant Garamond',serif">You're just not selling.</em></h2>
+    <p class="section-sub reveal">You know you need to show up. But showing up with content that doesn't convert is just exhausting yourself for free.</p>
+
+    <div class="problem-grid reveal">
+      <div class="problem-item">
+        <span class="problem-item-icon">😮‍💨</span>
+        <div class="problem-item-title">The blank page every time</div>
+        <div class="problem-item-body">You sit down to write a caption and an hour disappears. What comes out sounds nothing like you — and nothing like a sale.</div>
+      </div>
+      <div class="problem-item">
+        <span class="problem-item-icon">👍</span>
+        <div class="problem-item-title">Likes but no buyers</div>
+        <div class="problem-item-body">People love your content. They save it, share it, comment on it. Then they go and buy from someone else. Your content isn't converting.</div>
+      </div>
+      <div class="problem-item">
+        <span class="problem-item-icon">🔁</span>
+        <div class="problem-item-title">Inconsistency that kills reach</div>
+        <div class="problem-item-body">You post in bursts when inspiration strikes. Then disappear for a week. The algorithm notices before your audience does.</div>
+      </div>
+      <div class="problem-item">
+        <span class="problem-item-icon">🤖</span>
+        <div class="problem-item-title">AI that sounds like AI</div>
+        <div class="problem-item-body">You've tried other tools. The output is technically correct and completely lifeless. Nobody reads it. Nobody buys from it.</div>
+      </div>
+      <div class="problem-item">
+        <span class="problem-item-icon">⏰</span>
+        <div class="problem-item-title">No time for all of this</div>
+        <div class="problem-item-body">You're a mum, a founder, a creator — often all three at once. Content creation is supposed to support your life, not consume it.</div>
+      </div>
+      <div class="problem-item">
+        <span class="problem-item-icon">🤷‍♀️</span>
+        <div class="problem-item-title">No system, just survival</div>
+        <div class="problem-item-body">You're reacting to the algorithm instead of leading it. There's no strategy, no calendar, no plan. Just whatever you can cobble together today.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" style="background:var(--warm-white)">
+  <div class="container">
+    <div class="section-eyebrow reveal">The Process</div>
+    <h2 class="section-title reveal">Four steps from offer<br><em style="font-family:'Cormorant Garamond',serif">to content that converts</em></h2>
+    <p class="section-sub reveal">ContentFlow is offer-first by design. It starts with what you sell — then builds everything around it.</p>
+
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Build your Brand Profile</div>
+        <div class="step-body">Your niche, audience, tone of voice, credentials, and the words you never want to use again. The AI reads this for every generation.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Add your offers</div>
+        <div class="step-body">Every product, service, or programme you sell — with pain points, transformation, objections, and CTA. This is the brief the AI works from.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Choose your format and goal</div>
+        <div class="step-body">Post, reel, carousel, email, 7-day or 30-day plan. Leads, sales, engagement, or authority. The AI calibrates every word to your goal.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Publish content that sells</div>
+        <div class="step-body">Copy, schedule, or add to your calendar. Your content is ready — psychology-led, platform-native, and built to be pushed by the algorithm.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-eyebrow reveal">Everything Inside</div>
+    <h2 class="section-title reveal">Not a template library.<br><em style="font-family:'Cormorant Garamond',serif">A complete content operating system.</em></h2>
+    <p class="section-sub reveal">Every tool inside ContentFlow is connected. Your brand voice. Your offers. Your audience. All working together.</p>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">🧠</span>
+        <div class="feature-title">AI Content Generator</div>
+        <div class="feature-body">12 formats — Facebook posts, Instagram captions, Reels, TikTok scripts, carousels, emails, 7-day and 30-day content plans, story slides and more. Every output uses buyer psychology, handles objections, and ends with a CTA that earns a reply not just a click.</div>
+        <span class="feature-tag">Buyer Psychology Built In</span>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎬</span>
+        <div class="feature-title">Reel Production Package</div>
+        <div class="feature-body">Not just a script. A shot-by-shot visual storyboard with on-screen text, voiceover, B-roll ideas, CapCut notes, AI image prompts, and aspect ratio guidance. Built for faceless creators. Exportable as PDF.</div>
+        <span class="feature-tag">No On-Camera Required</span>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎠</span>
+        <div class="feature-title">Visual Carousel Builder</div>
+        <div class="feature-body">Live slide previews you can screenshot directly. Every slide rendered in your brand colours with headline, subheadline, body copy, Canva design notes, and a swipe-earning structure built for the algorithm.</div>
+        <span class="feature-tag">Screenshot Ready</span>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎣</span>
+        <div class="feature-title">Hook Machine</div>
+        <div class="feature-body">12 dedicated hook engines — viral, emotional, story, sales, reel, carousel, email, niche, pillar, objection, authority, and launch. Every hook is algorithm-trained to get pushed, not killed. Generate 5, 10 or 20 at once.</div>
+        <span class="feature-tag">Algorithm-Trained</span>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🏷</span>
+        <div class="feature-title">Offer Library</div>
+        <div class="feature-body">Add every product and service you sell with full psychology briefs — pain points, transformation, objections, buyer language, and CTAs. The AI uses this as its selling brief for every piece of content it writes.</div>
+        <span class="feature-tag">The Engine Behind Everything</span>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📅</span>
+        <div class="feature-title">Content Calendar & Scheduler</div>
+        <div class="feature-body">Monthly calendar view, posting reminders, status tracking (draft, scheduled, posted), and a posting queue. Direct scheduling via Ayrshare coming in the Creator plan.</div>
+        <span class="feature-tag">Plan Your Publishing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOOK MACHINE CALLOUT -->
+<div style="padding:0 1.5rem">
+  <div class="hook-callout reveal">
+    <div>
+      <div class="hook-callout-eyebrow">Included in every plan</div>
+      <div class="hook-callout-title">The Hook Machine™<br>The market has changed.</div>
+      <div class="hook-callout-body">
+        People are tired of lazy hooks. "3 tips…" "Watch this…" "Here's the secret…" Those days are fading. The creators winning now use emotional hooks, story hooks, detailed hooks that make people say <em style="color:rgba(255,255,255,0.85)">"wait — that's me."</em> That's exactly what the Hook Machine was built for.
+      </div>
+      <div class="hook-engines-mini">
+        <span class="hook-engine-mini-tag">🔥 Viral</span>
+        <span class="hook-engine-mini-tag">💛 Emotional</span>
+        <span class="hook-engine-mini-tag">📖 Story</span>
+        <span class="hook-engine-mini-tag">💳 Sales</span>
+        <span class="hook-engine-mini-tag">🎬 Reel</span>
+        <span class="hook-engine-mini-tag">✉️ Email Subject</span>
+        <span class="hook-engine-mini-tag">🎯 Niche</span>
+        <span class="hook-engine-mini-tag">🛡 Objection</span>
+        <span class="hook-engine-mini-tag">🚀 Launch</span>
+      </div>
+    </div>
+    <div style="text-align:center;flex-shrink:0">
+      <a href="https://contentflowapp-home.netlify.app" style="display:inline-flex;flex-direction:column;align-items:center;gap:0.5rem;background:var(--brass);color:white;padding:1.25rem 2rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.88rem;letter-spacing:0.04em;box-shadow:0 4px 20px rgba(140,109,63,0.4);transition:all 0.2s;white-space:nowrap" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(140,109,63,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(140,109,63,0.4)'">
+        🎣 Try the Hook Machine
+        <span style="font-size:0.65rem;font-weight:400;opacity:0.8">Free — no card needed</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<section class="proof">
+  <div class="container">
+    <div class="section-eyebrow reveal">What creators say</div>
+    <h2 class="section-title reveal">Built for women who are<br><em style="font-family:'Cormorant Garamond',serif">done creating content for free</em></h2>
+
+    <div class="proof-grid">
+      <div class="proof-card reveal">
+        <div class="proof-quote">I've tried every AI tool. ContentFlow is the first one that actually sounds like me — and the first one that's made me money. It knows what I'm selling.</div>
+        <div class="proof-author">
+          <div class="proof-avatar" style="background:var(--forest)">S</div>
+          <div>
+            <div class="proof-name">Sarah M.</div>
+            <div class="proof-handle">Digital product creator · UK</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-card reveal">
+        <div class="proof-quote">I'm a mum of two and I was spending 3 hours a week on content that went nowhere. ContentFlow cut that to 30 minutes and my DMs are actually moving now.</div>
+        <div class="proof-author">
+          <div class="proof-avatar" style="background:var(--brass)">T</div>
+          <div>
+            <div class="proof-name">Tanya R.</div>
+            <div class="proof-handle">Online coach · Founding member</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-card reveal">
+        <div class="proof-quote">The Hook Machine alone is worth it. I generated 20 hooks for my digital product launch in 2 minutes. Three of them went viral. My best launch yet.</div>
+        <div class="proof-author">
+          <div class="proof-avatar" style="background:var(--clay)">A</div>
+          <div>
+            <div class="proof-name">Amara K.</div>
+            <div class="proof-handle">Digital seller · Beacons creator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--warm-white)">
+  <div class="container">
+    <div class="section-eyebrow reveal">Pricing</div>
+    <h2 class="section-title reveal">Simple, honest pricing.<br><em style="font-family:'Cormorant Garamond',serif">No tricks, no lock-ins.</em></h2>
+    <p class="section-sub reveal">Start free. Upgrade when you're ready. Pay via PayPal or Wise — no card forms, no subscriptions locked in.</p>
+
+    <div class="pricing-grid">
+
+      <!-- Free -->
+      <div class="pricing-card reveal">
+        <div class="pricing-top">
+          <div class="pricing-name">Free Trial</div>
+          <div class="pricing-tagline">Try ContentFlow with no commitment. See how it works before spending a penny.</div>
+          <div class="pricing-price"><sup>£</sup>0</div>
+          <div class="pricing-period">forever free</div>
+        </div>
+        <div class="pricing-body">
+          <div class="pricing-feature">10 content generations per month</div>
+          <div class="pricing-feature">3 offers in your library</div>
+          <div class="pricing-feature">5 saved content pieces</div>
+          <div class="pricing-feature">Hook Machine access</div>
+          <div class="pricing-feature">Brand profile</div>
+          <div class="pricing-feature">Manual posting reminders</div>
+        </div>
+        <div class="pricing-foot">
+          <a href="https://contentflowapp-home.netlify.app" class="btn-pricing-ghost">Start Free →</a>
+          <div class="pricing-note">No card required. Ever.</div>
+        </div>
+      </div>
+
+      <!-- Founding Member -->
+      <div class="pricing-card featured reveal">
+        <div class="pricing-badge">Founding Member</div>
+        <div class="pricing-top">
+          <div class="pricing-name">Founding Member</div>
+          <div class="pricing-tagline">Locked-in forever at this price. When this tier closes, it's gone.</div>
+          <div class="pricing-price"><sup>£</sup>17</div>
+          <div class="pricing-period">/month</div>
+          <div class="pricing-annual">or £163/year — save 20%</div>
+        </div>
+        <div class="pricing-body">
+          <div class="pricing-feature">100 content generations/month</div>
+          <div class="pricing-feature">Unlimited offers</div>
+          <div class="pricing-feature">Unlimited saved content</div>
+          <div class="pricing-feature">Full reel production packages</div>
+          <div class="pricing-feature">Visual carousel builder</div>
+          <div class="pricing-feature">Content calendar + scheduler</div>
+          <div class="pricing-feature">Hook Machine — all 12 engines</div>
+          <div class="pricing-feature">Priority generation speed</div>
+        </div>
+        <div class="pricing-foot">
+          <a href="https://www.paypal.com/paypalme/jrlehmann193" target="_blank" class="btn-pricing-primary">Pay via PayPal →</a>
+          <a href="https://wise.com/pay/r/jrlehmann193" target="_blank" class="btn-pricing-secondary">Pay via Wise →</a>
+          <div class="pricing-note">After paying, email jrlehmann193@gmail.com with your reference. Access confirmed within 24hrs.</div>
+        </div>
+      </div>
+
+      <!-- Creator -->
+      <div class="pricing-card reveal">
+        <div class="pricing-top">
+          <div class="pricing-name">Creator</div>
+          <div class="pricing-tagline">Unlimited everything. The complete content operating system.</div>
+          <div class="pricing-price"><sup>£</sup>37</div>
+          <div class="pricing-period">/month</div>
+          <div class="pricing-annual">or £355/year — save 20%</div>
+        </div>
+        <div class="pricing-body">
+          <div class="pricing-feature">Unlimited content generations</div>
+          <div class="pricing-feature">Unlimited offers and saved content</div>
+          <div class="pricing-feature">30-day content planning</div>
+          <div class="pricing-feature">Direct social scheduling (Ayrshare)</div>
+          <div class="pricing-feature">Advanced reel assistant</div>
+          <div class="pricing-feature">AI visual prompts for Canva</div>
+          <div class="pricing-feature">All Hook Machine engines</div>
+        </div>
+        <div class="pricing-foot">
+          <a href="https://www.paypal.com/paypalme/jrlehmann193" target="_blank" class="btn-pricing-primary">Pay via PayPal →</a>
+          <a href="https://wise.com/pay/r/jrlehmann193" target="_blank" class="btn-pricing-secondary">Pay via Wise →</a>
+          <div class="pricing-note">After paying, email jrlehmann193@gmail.com with your reference. Access confirmed within 24hrs.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Payment icons -->
+    <div class="payment-icons reveal">
+      <span class="payment-icon">🅿 PayPal accepted</span>
+      <span class="payment-icon">💸 Wise accepted</span>
+      <span class="payment-icon">🔒 Secure payment</span>
+      <span class="payment-icon">↩ Cancel any time</span>
+      <span class="payment-icon">✉️ 24hr access confirmation</span>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Ready to build content<br><em>that actually sells?</em></h2>
+  <p>Start free today. No card. No commitment. Just content that works harder than you do.</p>
+  <div class="final-cta-btns">
+    <a href="https://contentflowapp-home.netlify.app" class="btn-final-primary">✦ Start Free Now</a>
+    <a href="https://www.paypal.com/paypalme/jrlehmann193" target="_blank" class="btn-final-brass">🏷 Get Founding Member — £17/mo</a>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.68rem;color:rgba(255,255,255,0.35)">Pay via PayPal or Wise · Access within 24hrs · Cancel any time by email</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:0.5rem">ContentFlow</div>
+  <div>The Offer-First AI Content Studio</div>
+  <div style="margin-top:0.75rem">
+    Questions? <a href="mailto:jrlehmann193@gmail.com">jrlehmann193@gmail.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://contentflowapp-home.netlify.app">Open App</a>
+    &nbsp;·&nbsp;
+    <a href="#pricing">Pricing</a>
+  </div>
+  <div style="margin-top:0.75rem;opacity:0.5">© 2025 ContentFlow. Built with intention.</div>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Stagger children if it's a grid parent
+      const children = e.target.querySelectorAll('.feature-card, .proof-card, .pricing-card, .problem-item, .step');
+      children.forEach((child, i) => {
+        child.style.transitionDelay = `${i * 0.08}s`;
+        child.classList.add('visible');
+      });
+    }
+  });
+}, { threshold: 0.12, rootMargin:'0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => {
+  observer.observe(el);
+});
+
+// Smooth nav background on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 60) {
+    nav.style.boxShadow = '0 2px 20px rgba(26,31,28,0.1)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+});
+</script>
+</body>
+</html>
